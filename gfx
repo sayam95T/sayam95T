@@ -1,0 +1,39 @@
+-- Script to enhance lighting effects in Roblox
+
+local Lighting = game:GetService("Lighting")
+
+-- Enable realistic lighting
+Lighting.GlobalShadows = true
+Lighting.Ambient = Color3.fromRGB(127, 127, 127)  -- Adjust ambient light color
+Lighting.OutdoorAmbient = Color3.fromRGB(127, 127, 127)  -- Adjust outdoor ambient light color
+Lighting.Brightness = 2  -- Adjust overall brightness of the scene
+
+-- Enable sun rays
+Lighting.SunRays.Enabled = true
+Lighting.SunRays.Intensity = 0.5  -- Adjust intensity of sun rays
+
+-- Enable bloom effect
+Lighting.Bloom.Enabled = true
+Lighting.Bloom.Intensity = 0.5  -- Adjust intensity of bloom effect
+
+-- Enable depth of field
+Lighting.DepthOfField.Enabled = true
+Lighting.DepthOfField.FarIntensity = 0.5  -- Adjust intensity of far blur
+Lighting.DepthOfField.NearIntensity = 0.5  -- Adjust intensity of near blur
+
+-- Enable color correction
+Lighting.ColorCorrection.Enabled = true
+Lighting.ColorCorrection.Saturation = 0.25  -- Adjust color saturation
+Lighting.ColorCorrection.Contrast = 0.25  -- Adjust contrast
+
+-- Enable fog
+Lighting.FogEnabled = true
+Lighting.FogColor = Color3.fromRGB(191, 191, 191)  -- Adjust fog color
+Lighting.FogEnd = 1000  -- Adjust fog end distance
+
+-- Optional: Enable realistic water reflection (if applicable)
+local Water = game.Workspace:FindFirstChild("Water")  -- Replace "Water" with your water object name
+if Water then
+    Water.ReflectionMode = Enum.ReflectionMode.Global
+    Water.ReflectionSize = 512  -- Adjust reflection size
+end
