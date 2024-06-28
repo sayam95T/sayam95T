@@ -1,0 +1,86 @@
+-- Script to add basic reflections to Roblox game
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local Lighting = game:GetService("Lighting")
+
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local head = character:WaitForChild("Head")
+local camera = game.Workspace.CurrentCamera
+
+-- Function to create mirror surface
+local function createMirror()
+    local mirrorSurface = Instance.new("Part")
+    mirrorSurface.Size = Vector3.new(4, 2, 0.1)  -- Adjust size of mirror surface
+    mirrorSurface.Position = Vector3.new(0, 5, 0)  -- Adjust position of mirror surface
+    mirrorSurface.Anchored = true
+    mirrorSurface.CanCollide = false
+    mirrorSurface.Parent = game.Workspace
+
+    local mirrorSurfaceGui = Instance.new("SurfaceGui")
+    mirrorSurfaceGui.CanvasSize = Vector2.new(512, 512)  -- Adjust canvas size
+    mirrorSurfaceGui.Face = Enum.NormalId.Front
+    mirrorSurfaceGui.Parent = mirrorSurface
+
+    local mirrorFrame = Instance.new("Frame")
+    mirrorFrame.Size = UDim2.new(1, 0, 1, 0)
+    mirrorFrame.BackgroundTransparency = 0.5  -- Adjust transparency of mirror reflection
+    mirrorFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)  -- Adjust background color of mirror reflection
+    mirrorFrame.Parent = mirrorSurfaceGui
+
+    return mirrorSurface, mirrorSurfaceGui
+end
+
+-- Create mirror surface
+local mirror, mirrorGui = createMirror()
+
+-- Update mirror reflection
+local function updateReflection()
+    local mirrorPosition = mirror.Position
+    local mirrorNormal = mirror.CFrame.LookVector
+
+    local headPosition = head.Position
+
+    local reflectionVector = (2 * mirrorNormal:Dot(headPosition - mirrorPosition) * mirrorNormal) - (headPosition - mirrorPosition)
+    local reflectedPosition = headPosition + reflectionVector
+
+    local cameraPosition = camera.CFrame.Position
+    local cameraLookAt = camera.CFrame.LookVector
+
+    local reflectedCameraPosition = reflectedPosition + (reflectedPosition - cameraPosition)
+    local reflectedCameraLookAt = reflectedPosition + (reflectedPosition - (cameraPosition + cameraLookAt))
+
+    camera.CFrame = CFrame.new(reflectedCameraPosition, reflectedCameraLookAt)
+end
+
+-- Render mirror reflection
+local function renderReflection()
+    mirrorGui.CanvasPosition = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+
+    local oldCameraCFrame = camera.CFrame
+    camera.CFrame = CFrame.new(mirror.Position, mirror.Position + mirror.CFrame.LookVector)
+
+    RunService.RenderStepped:Wait()
+
+    local mirrorReflection = Lighting:FindFirstChild("MirrorReflection")
+    if not mirrorReflection then
+        mirrorReflection = Instance.new("RenderSettings")
+        mirrorReflection.Name = "MirrorReflection"
+        mirrorReflection.Parent = Lighting
+    end
+
+    mirrorReflection.MirrorTransparency = 0.5  -- Adjust transparency of mirror reflection
+    mirrorReflection.MirrorSize = 512  -- Adjust size of mirror reflection
+
+    RunService.RenderStepped:Wait()
+
+    camera.CFrame = oldCameraCFrame
+end
+
+-- Update and render reflection periodically
+while true do
+    updateReflection()
+    renderReflection()
+    wait(0.1)  -- Adjust update frequency
+end
