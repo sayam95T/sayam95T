@@ -12,14 +12,14 @@ local camera = game.Workspace.CurrentCamera
 -- Function to create mirror surface
 local function createMirror()
     local mirrorSurface = Instance.new("Part")
-    mirrorSurface.Size = Vector3.new(4, 2, 0.1)  -- Adjust size of mirror surface
+    mirrorSurface.Size = Vector3.new(11, 6, 0.1)  -- Adjust size of mirror surface
     mirrorSurface.Position = Vector3.new(0, 5, 0)  -- Adjust position of mirror surface
     mirrorSurface.Anchored = true
     mirrorSurface.CanCollide = false
     mirrorSurface.Parent = game.Workspace
 
     local mirrorSurfaceGui = Instance.new("SurfaceGui")
-    mirrorSurfaceGui.CanvasSize = Vector2.new(512, 512)  -- Adjust canvas size
+    mirrorSurfaceGui.CanvasSize = Vector2.new(1024, 1024)  -- Adjust canvas size
     mirrorSurfaceGui.Face = Enum.NormalId.Front
     mirrorSurfaceGui.Parent = mirrorSurface
 
@@ -71,7 +71,7 @@ local function renderReflection()
     end
 
     mirrorReflection.MirrorTransparency = 0.5  -- Adjust transparency of mirror reflection
-    mirrorReflection.MirrorSize = 512  -- Adjust size of mirror reflection
+    mirrorReflection.MirrorSize = 1024  -- Adjust size of mirror reflection
 
     RunService.RenderStepped:Wait()
 
