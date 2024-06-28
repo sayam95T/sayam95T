@@ -76,6 +76,8 @@ local function renderReflection()
     RunService.RenderStepped:Wait()
 
     camera.CFrame = oldCameraCFrame
+
+    print("Mirror reflection updated and rendered.")  -- Notification message
 end
 
 -- Update and render reflection periodically
